@@ -39,7 +39,7 @@ private Connection connection;
 		int affectedRows = statement.executeUpdate();
 		
 		if(affectedRows == 0) {
-			throw new SQLException("Usuario -> Não foi possível Salvar");
+			throw new SQLException("Usuario -> Nao foi possivel Salvar");
 		}
 		
 		ResultSet rs = statement.getGeneratedKeys();
@@ -49,7 +49,7 @@ private Connection connection;
 			 return rs.getLong("id");
 
 		} else {
-			throw new SQLException("Não foi possível obter o ID do Usuario");
+			throw new SQLException("Nao foi possivel obter o ID do Usuario");
 		}
 	}
 	
@@ -84,7 +84,7 @@ private Connection connection;
 			if(rs.next()) {
 				id = rs.getLong(1); 
 			}else {
-				throw new SQLException("Usuario não localizado");
+				throw new SQLException("Usuario nï¿½o localizado");
 			}
 		
 		return id;

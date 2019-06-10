@@ -49,7 +49,7 @@ public class ContatoDAO {
 		int affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Não foi possível Salvar o Contato");
+			throw new SQLException("Nao foi possivel Salvar o Contato");		
 		}
 
 		ResultSet rs = statement.getGeneratedKeys();
@@ -59,7 +59,7 @@ public class ContatoDAO {
 			return rs.getLong("id");
 
 		} else {
-			throw new SQLException("Não foi possível obter o ID do novo Contato");
+			throw new SQLException("Nao foi possivel obter o ID do novo Contato");
 		}
 
 	}
@@ -128,7 +128,7 @@ public class ContatoDAO {
 		affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Não foi possível deletar contato");
+			throw new SQLException("Nao foi possivel deletar contato");
 		}
 
 	}
@@ -163,7 +163,7 @@ public class ContatoDAO {
 			return contato;
 
 		} else {
-			throw new SQLException("Contato não existe");
+			throw new SQLException("Contato nao existe");
 		}
 
 	}
@@ -186,13 +186,9 @@ public class ContatoDAO {
 		int affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Não foi possível Atualizar Contato");
+			throw new SQLException("Nao foi possivel Atualizar Contato");
 		}
 
 		ResultSet rs = statement.getGeneratedKeys();
-
 	}
-		
-	
-
 }
