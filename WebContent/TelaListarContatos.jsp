@@ -46,10 +46,10 @@
 						<td>${contato.getTelefone()}</td>
 						<td>${contato.getEmail()}</td>
 						<td><a class="btn btn-default"
-							href="Contatos?acao=EditarContato&contatoId=${contato.getId()}"><span
+							href="EditarContato?contatoId=${contato.getId()}"><span
 								class="glyphicon glyphicon-pencil"></span></a></td>
 						<td><a class="btn btn-danger"
-							href="Contatos?acao=ExcluirContato&contatoId=${contato.getId()}"><span
+							href="ExcluirContato?contatoId=${contato.getId()}"><span
 								class="glyphicon glyphicon-trash"></span></a></td>
 						<td></td>
 					</tr>
@@ -57,7 +57,7 @@
 				<tr>
 <td></td><td></td><td></td><td></td><td></td><td></td>
 					<td><a class="btn btn-success"
-						href="Contatos?acao=CriarContato&usuarioId=${usuarioId}"><span
+						href="NovoContato"><span
 							class="glyphicon glyphicon-plus"></span></a></td>
 				</tr>
 			</tbody>

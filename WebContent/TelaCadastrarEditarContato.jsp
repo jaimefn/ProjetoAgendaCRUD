@@ -24,10 +24,7 @@
 				<h3 class="page-header">${titulo}</h3>
 			</div>
 		</div>
-		<form action="Contatos" method="post">
-
-			<input type="hidden" class="form-control" id="acao" name="acao" value="SalvarContato"> 
-			<input type="hidden" class="form-control" id="usuarioId" name="usuarioId" value="${contato.getUsuarioId()}"> 
+		<form action="SalvarContato" method="post">
 			<input type="hidden" class="form-control" id="contatoId" name="contatoId" value="${contato.getId()}"> 
 			
 			<div class="row">
@@ -72,7 +69,7 @@
 				<div class="col-md-4 col-md-offset-4">
 					<button type="submit" class="btn btn-primary">Salvar</button>
 					<a
-						href="Contatos?acao=ListarContatos&usuarioId=${contato.getUsuarioId()}"
+						href="ListarContatos"
 						class="btn btn-default">Cancelar</a>
 				</div>
 			</div>

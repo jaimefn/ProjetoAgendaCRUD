@@ -6,14 +6,18 @@ import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 
 import connection.SingleConnection;
+import constantes.Mensagem;
 import model.Telefone;
 
 public class TelefoneDAO {
 
-	private Connection connection;
-	
+	private Connection connection = null;
+
+	public TelefoneDAO(Connection connection) {
+		this.connection = connection;
+	}
+
 	public void Novo(Telefone telefone) throws SQLException {
-		connection = SingleConnection.getConnection();
 		
 		String sqlInsertTelefone = "INSERT INTO Telefone (tipo_id,numero,contato_Id) VALUES (?,?,?)";
 		
@@ -26,7 +30,7 @@ public class TelefoneDAO {
 		int affectedRows = statement.executeUpdate();
 		
 		if(affectedRows == 0) {
-			throw new SQLException("Telefone -> Não foi possível Salvar");
+			throw new SQLException(Mensagem.NaoFoiPossivelSalvar);
 		}
 		
 		
@@ -36,32 +40,22 @@ public class TelefoneDAO {
 		String sqlDeleteTelefone = "DELETE FROM telefone WHERE id=" + id;
 		int affectedRows = 0;
 		
-		connection = SingleConnection.getConnection();
 				
-		try {
 			PreparedStatement statement = connection.prepareStatement(sqlDeleteTelefone);
 			affectedRows = statement.executeUpdate();	
-						
-		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
+
+			if(affectedRows == 0) {
+				throw new SQLException(Mensagem.NaoFoiPossivelExcluir);
+			}
 		
 
 	}
 
 	public void DeletarPorContatoId(Long contatoId) throws SQLException {
 		String sqlDeleteTelefones = "DELETE FROM telefone WHERE contato_id=" + contatoId;
-		
-		int affectedRows = 0;
-		
-		connection = SingleConnection.getConnection();
-				
-		try {
-			PreparedStatement statement = connection.prepareStatement(sqlDeleteTelefones);
-			affectedRows = statement.executeUpdate();	
 						
-		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
+			PreparedStatement statement = connection.prepareStatement(sqlDeleteTelefones);
+			statement.executeUpdate();	
+
 	}
 }

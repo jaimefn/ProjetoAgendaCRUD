@@ -16,8 +16,8 @@ public class Contato {
 	private List<Telefone> telefones;
 	private List<Email> emails;
 	private List<RedeSocial> redesSociais;
-	private LocalDate dataNascimento;
-	private LocalDateTime dataCadastro;
+	private LocalDate dataNascimento = null;
+	private LocalDateTime dataCadastro = null;
 	private String telefone;
 	private String redeSocial;
 	private String email;
@@ -59,7 +59,7 @@ public class Contato {
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}	
-	/*
+	
 	public List<Telefone> getTelefones() {
 		return telefones;
 	}
@@ -78,7 +78,6 @@ public class Contato {
 	public void setRedesSociais(RedeSocial redeSociai) {
 		this.redesSociais.add(redeSociai);
 	}
-	*/
 	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}

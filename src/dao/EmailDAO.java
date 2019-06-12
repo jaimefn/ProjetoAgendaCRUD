@@ -5,14 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import connection.SingleConnection;
+import constantes.Mensagem;
 import model.Email;
 
 public class EmailDAO {
 
-	private Connection connection;
+	private Connection connection = null;
 	
+	
+	public EmailDAO(Connection connection){
+		this.connection = connection;
+	}
+
 	public void Novo(Email email) throws SQLException {
-		connection = SingleConnection.getConnection();
 		
 		String sqlInsertEmail = "INSERT INTO Email (email,contato_Id) VALUES (?,?)";
 	
@@ -25,39 +30,29 @@ public class EmailDAO {
 		int affectedRows = statement.executeUpdate();
 		
 		if(affectedRows == 0) {
-			throw new SQLException("Email -> Não foi possível Salvar o Contato");
+			throw new SQLException(Mensagem.NaoFoiPossivelSalvar);
 		}
 	}
 	
 	public void DeletarPorId(Long id) throws SQLException {
 		String sqlDeleteEmail = "DELETE FROM email WHERE id=" + id;
 		int affectedRows = 0;
-		
-		connection = SingleConnection.getConnection();
-				
-		try {
+						
 			PreparedStatement statement = connection.prepareStatement(sqlDeleteEmail);
 			affectedRows = statement.executeUpdate();	
+			
+			if(affectedRows == 0) {
+				throw new SQLException(Mensagem.NaoFoiPossivelExcluir);
+			}
+		
 						
-		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
 	}
 
 	public void DeletarPorContatoId(Long contatoId) throws SQLException {
 		String sqlDeleteEmails = "DELETE FROM email WHERE contato_id=" + contatoId;
 		
-		int affectedRows = 0;
-		
-		connection = SingleConnection.getConnection();
-				
-		try {
 			PreparedStatement statement = connection.prepareStatement(sqlDeleteEmails);
-			affectedRows = statement.executeUpdate();	
-						
-		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
-	}
+			statement.executeUpdate();	
+}
 
 }

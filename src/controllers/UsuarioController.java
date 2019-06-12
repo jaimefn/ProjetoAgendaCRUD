@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,8 @@ import model.Usuario;
 public class UsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private Connection connection = null;
+	
 	public UsuarioController() {
 		super();
 	}
@@ -32,11 +35,14 @@ public class UsuarioController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		UsuarioDAO usuarioDao = new UsuarioDAO();
+		
+		connection = (Connection) req.getAttribute("connection");
+
+		UsuarioDAO usuarioDao = new UsuarioDAO(connection);
 		
 		try {
 			Usuario usuario = loadUsuarioViaParametros(req);
-			//implementar verificação se Usuario já existe
+			//implementar verificaï¿½ï¿½o se Usuario jï¿½ existe
 			Long usuarioId = usuarioDao.Novo(usuario);
 			req.setAttribute("nome", usuario.getNome());
 			req.setAttribute("id", usuarioId);

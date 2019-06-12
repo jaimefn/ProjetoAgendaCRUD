@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<jsp:include page="IncludeBootStrap.jsp" />
+
 <title>Login</title>
 
 <style>
@@ -76,10 +78,11 @@ span.psw {
 </style>
 </head>
 <body>
-
+<jsp:include page="IncludeCabecalho.jsp"/>
 	<h2>Efetuar Login</h2>
 
-	<form action="ValidarLogin" method="post">
+	<form action="Login" method="post">
+	<input type="hidden" name="acao" value="Entrar">
 		<div class="imgcontainer">
 			<img src="resources\images\img_avatar2.png" alt="Avatar"
 				class="avatar">
@@ -101,6 +104,6 @@ span.psw {
 
 
 	</form>
-
+<jsp:include page="IncludeRodaPe.jsp"/>
 </body>
 </html>

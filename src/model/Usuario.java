@@ -15,8 +15,9 @@ public class Usuario {
 	private String senha;
 	private String endereco;
 	private String fotoUrl;
-	private LocalDateTime dataCadastro;
-	private LocalDate dataNascimento;
+	private LocalDateTime dataCadastro = null;
+	private LocalDate dataNascimento = null;
+	private List<Contato> contatos;
 	
 	public Long getId() {
 		return id;
@@ -77,6 +78,15 @@ public class Usuario {
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
+	}
+	public void setContatos(Contato contato) {
+		this.contatos.add(contato);
 	}
 	
 	@Override

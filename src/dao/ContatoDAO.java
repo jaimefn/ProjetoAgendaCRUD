@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.jdt.internal.compiler.ast.ThrowStatement;
 
 import connection.SingleConnection;
+import constantes.Mensagem;
 import model.Contato;
 import model.Email;
 import model.RedeSocial;
@@ -22,17 +23,15 @@ import model.Telefone;
 
 public class ContatoDAO {
 
-	private Connection connection;
+	private Connection connection = null;
 
-	public ContatoDAO() {
-
+	public ContatoDAO(Connection connection) {
+		this.connection = connection;
 	}
 
 	public Long Novo(Contato contato) throws SQLException {
 
 		String sqlInsertContato = "INSERT INTO contato (nome,endereco,foto,usuario_id,data_nascimento,data_cadastro,telefone,rede_social,email) VALUES (?,?,?,?,?,?,?,?,?)";
-
-		connection = SingleConnection.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(sqlInsertContato, Statement.RETURN_GENERATED_KEYS);
 
@@ -49,42 +48,22 @@ public class ContatoDAO {
 		int affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Nao foi possivel Salvar o Contato");		
+			throw new SQLException(Mensagem.NaoFoiPossivelSalvar);
 		}
 
 		ResultSet rs = statement.getGeneratedKeys();
 
 		if (rs.next()) {
-
 			return rs.getLong("id");
-
 		} else {
-			throw new SQLException("Nao foi possivel obter o ID do novo Contato");
+			throw new SQLException(Mensagem.NaoRetornouId);
 		}
 
-	}
-
-	public Long getUsuarioId(Long contatoId) throws SQLException {
-
-		String sql = "select usuario_id from contato WHERE id=" + contatoId;
-
-		connection = SingleConnection.getConnection();
-
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet rs = statement.executeQuery();
-
-		if (rs.next()) {
-			return rs.getLong(1);
-		} else {
-			throw new SQLException("Contato não existe");
-		}
 	}
 
 	public List<Contato> SelecionarContatosPorUsuarioId(Long usuarioId) throws SQLException {
 
 		List<Contato> contatos = new ArrayList<Contato>();
-
-		connection = SingleConnection.getConnection();
 
 		String sql = "select * from contato where usuario_id=" + usuarioId;
 
@@ -112,7 +91,6 @@ public class ContatoDAO {
 			// contato.setDataNascimento(dataNascimento);
 
 			contatos.add(contato);
-
 		}
 
 		return contatos;
@@ -122,22 +100,18 @@ public class ContatoDAO {
 		String sqlDeleteContato = "DELETE FROM contato WHERE id=" + id;
 		int affectedRows = 0;
 
-		connection = SingleConnection.getConnection();
-
 		PreparedStatement statement = connection.prepareStatement(sqlDeleteContato);
 		affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Nao foi possivel deletar contato");
+			throw new SQLException(Mensagem.NaoFoiPossivelExcluir);
 		}
 
 	}
 
 	public Contato BuscarContato(long contatoId) throws SQLException {
 		Contato contato = new Contato();
-
-		connection = SingleConnection.getConnection();
-
+		
 		String sql = "select * from contato where id=" + contatoId;
 
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -154,24 +128,22 @@ public class ContatoDAO {
 			contato.setRedeSocial(rs.getString("rede_social"));
 
 			Date dataNascimento = rs.getDate("data_nascimento");
-			if (dataNascimento == null) {
-				contato.setDataNascimento(null);
-			} else {
+
+			if (dataNascimento != null) {
 				contato.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
 			}
 
 			return contato;
 
 		} else {
-			throw new SQLException("Contato nao existe");
+			throw new SQLException(Mensagem.NaoFoiPossivelLocalizar);
 		}
 
 	}
 
-	public void Atualizar(Contato contato) throws Exception {
-		String sqlUpdateContato = "UPDATE contato SET nome=?,endereco=?,usuario_id=?,data_nascimento=?,telefone=?,rede_social=?,email=? WHERE id="+contato.getId();
-
-		connection = SingleConnection.getConnection();
+	public void Atualizar(Contato contato) throws SQLException {
+		String sqlUpdateContato = "UPDATE contato SET nome=?,endereco=?,usuario_id=?,data_nascimento=?,telefone=?,rede_social=?,email=? WHERE id="
+				+ contato.getId();
 
 		PreparedStatement statement = connection.prepareStatement(sqlUpdateContato);
 
@@ -186,7 +158,7 @@ public class ContatoDAO {
 		int affectedRows = statement.executeUpdate();
 
 		if (affectedRows == 0) {
-			throw new SQLException("Nao foi possivel Atualizar Contato");
+			throw new SQLException(Mensagem.NaoFoiPossivelAtualizar);
 		}
 
 		ResultSet rs = statement.getGeneratedKeys();

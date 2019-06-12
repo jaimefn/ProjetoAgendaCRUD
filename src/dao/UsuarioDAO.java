@@ -10,21 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connection.SingleConnection;
+import constantes.Mensagem;
 import model.Contato;
 import model.Telefone;
 import model.Usuario;
 
 public class UsuarioDAO {
 
-private Connection connection;
-	
+	private Connection connection = null;
+
+	public UsuarioDAO(Connection connection) {
+		this.connection = connection;
+	}
+
 	public Long Novo(Usuario usuario) throws SQLException {
 		connection = SingleConnection.getConnection();
-		
+
 		String sqlInsertUsuario = "INSERT INTO usuario (nome,usuario,senha,endereco,foto_url,data_nascimento,data_cadastro,telefone,email) VALUES (?,?,?,?,?,?,?,?,?)";
-		
-		PreparedStatement statement = connection.prepareStatement(sqlInsertUsuario,Statement.RETURN_GENERATED_KEYS);
-		
+
+		PreparedStatement statement = connection.prepareStatement(sqlInsertUsuario, Statement.RETURN_GENERATED_KEYS);
+
 		statement.setString(1, usuario.getNome());
 		statement.setString(2, usuario.getUsuario());
 		statement.setString(3, usuario.getSenha());
@@ -35,60 +40,72 @@ private Connection connection;
 		statement.setString(8, usuario.getTelefone());
 		statement.setString(9, usuario.getEmail());
 
-		
 		int affectedRows = statement.executeUpdate();
-		
-		if(affectedRows == 0) {
-			throw new SQLException("Usuario -> Nao foi possivel Salvar");
+
+		if (affectedRows == 0) {
+			throw new SQLException("Nao foi possivel Salvar usuario");
 		}
-		
+
 		ResultSet rs = statement.getGeneratedKeys();
 
 		if (rs.next()) {
 
-			 return rs.getLong("id");
+			return rs.getLong("id");
 
 		} else {
-			throw new SQLException("Nao foi possivel obter o ID do Usuario");
+			throw new SQLException(Mensagem.NaoRetornouId);
 		}
 	}
-	
-	
-	
+
 	public void DeletarPorId(Long id) throws SQLException {
 		String sqlDeleteUsuario = "DELETE FROM usuario WHERE id=" + id;
 		int affectedRows = 0;
-		
-		connection = SingleConnection.getConnection();
-				
-		try {
+
 			PreparedStatement statement = connection.prepareStatement(sqlDeleteUsuario);
-			affectedRows = statement.executeUpdate();	
-						
-		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
+			affectedRows = statement.executeUpdate();
+
+			if (affectedRows == 0) {
+				throw new SQLException(Mensagem.NaoFoiPossivelExcluir);
+			}
+
 	}
 
-	
 	public Long ValidarLogin(String usuario, String senha) throws SQLException {
-	connection = SingleConnection.getConnection();
-		
+	
 		String sql = "SELECT id from usuario where usuario='" + usuario + "' and senha='" + senha + "';";
 		Long id = 0L;
-		
-			PreparedStatement statement = connection.prepareStatement(sql);
-			ResultSet rs = statement.executeQuery();
-			
-		
-			if(rs.next()) {
-				id = rs.getLong(1); 
-			}else {
-				throw new SQLException("Usuario n�o localizado");
-			}
-		
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet rs = statement.executeQuery();
+
+		if (rs.next()) {
+			id = rs.getLong(1);
+		} else {
+			throw new SQLException(Mensagem.UsuarioOuSenhaInvalidos);
+		}
 		return id;
-				
 	}
-	
+
+	public Usuario Buscar(Long id) throws SQLException {
+		
+		Usuario usuario = new Usuario();
+		
+		String sql = "SELECT * from usuario where id=" + id;
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet rs = statement.executeQuery();
+
+		if (rs.next()) {
+			usuario.setId(rs.getLong("id"));
+			usuario.setNome(rs.getString("nome"));
+			usuario.setEndereco(rs.getString("endereco"));
+			usuario.setTelefone(rs.getString("telefone"));
+			usuario.setEmail(rs.getString("email"));
+			
+		} else {
+			throw new SQLException(Mensagem.NaoFoiPossivelLocalizar);
+		}
+		
+		return usuario;
+	}
 }
